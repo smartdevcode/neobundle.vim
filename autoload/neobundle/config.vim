@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 28 Oct 2011.
+" Last Modified: 01 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -43,23 +43,24 @@ endfunction
 function! neobundle#config#bundle(arg, ...)
   let bundle = neobundle#config#init_bundle(a:arg, a:000)
   let path = bundle.path
+  let rtpath = bundle.rtpath
   if has_key(s:neobundles, path)
-    call s:rtp_rm(path)
+    call s:rtp_rm(rtpath)
   endif
 
   let s:neobundles[path] = bundle
-  call s:rtp_add(path)
+  call s:rtp_add(rtpath)
 endfunction
 
 function! neobundle#config#rm_bndle(path)
   if has_key(s:neobundles, a:path)
-    call s:rtp_rm(s:neobundles[a:path].path)
+    call s:rtp_rm(s:neobundles[a:path].rtpath)
     call remove(s:neobundles, a:path)
   endif
 endfunction
 
 function! s:rtp_rm_all_bundles()
-  call filter(values(s:neobundles), 's:rtp_rm(v:val.path)')
+  call filter(values(s:neobundles), 's:rtp_rm(v:val.rtpath)')
 endfunction
 
 function! s:rtp_rm(dir)
@@ -75,8 +76,11 @@ endfunction
 function! neobundle#config#init_bundle(name, opts)
   let bundle = extend(s:parse_options(a:opts),
         \ s:parse_name(substitute(a:name,"['".'"]\+','','g')))
-  let bundle.path = s:expand_path(neobundle#get_neobundle_dir().'/'.
-        \ get(bundle, 'directory', bundle.name))
+  let bundle.path = s:expand_path(
+        \ neobundle#get_neobundle_dir().'/'.bundle.name)
+  let bundle.rtpath = has_key(bundle, 'rtp') ?
+        \ s:expand_path(bundle.path.'/'.bundle.rtp)
+        \ : bundle.path
   let bundle.orig_name = a:name
   let bundle.orig_opts = a:opts
 
@@ -110,7 +114,7 @@ endfunction
 
 function! s:parse_name(arg)
   if a:arg =~ '^\s*\(gh\|github\):\S\+\|^\w[[:alnum:]-]*/[^/]\+$'
-    let uri = 'https://github.com/'.split(a:arg, ':')[-1]
+    let uri = 'git://github.com/'.split(a:arg, ':')[-1]
     let name = substitute(split(uri, '/')[-1], '\.git\s*$','','i')
     let type = 'git'
   elseif a:arg =~ '^\s*\(git@\|git://\)\S\+'
@@ -127,7 +131,7 @@ function! s:parse_name(arg)
     endif
   else
     let name = a:arg
-    let uri  = 'https://github.com/vim-scripts/'.name.'.git'
+    let uri  = 'git//github.com/vim-scripts/'.name.'.git'
     let type = 'git'
   endif
 
@@ -141,17 +145,17 @@ endfunction
 let s:bundle_base = {}
 
 function! s:bundle_base.has_doc()
-  let path = self.path
-  return isdirectory(path.'/doc')
-  \   && (!filereadable(path.'/doc/tags') || filewritable(path.'/doc/tags'))
-  \   && (glob(path.'/doc/*.txt') != '' || glob(path.'/doc/*.??x') != '')
+  let rtpath = self.rtpath
+  return isdirectory(rtpath.'/doc')
+  \   && (!filereadable(rtpath.'/doc/tags') || filewritable(rtpath.'/doc/tags'))
+  \   && (glob(rtpath.'/doc/*.txt') != '' || glob(rtpath.'/doc/*.??x') != '')
 endfunction
 
 function! s:bundle_base.helptags()
   try
-    helptags `=self.path . '/doc/'`
+    helptags `=self.rtpath . '/doc/'`
   catch
-    call s:V.print_error('Error generating helptags in '.self.path)
+    call s:V.print_error('Error generating helptags in '.self.rtpath)
     call s:V.print_error(v:exception . ' ' . v:throwpoint)
   endtry
 endfunction
