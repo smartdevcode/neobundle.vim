@@ -110,6 +110,12 @@ COMMANDS 					*neobundle-commands*
 		Repository type.
 		For example: nosync, git, svn, hg, ...
 
+		rtp		(String)
+		Specify runtime path.
+		You may use this option when the repository has Vim plugin in
+		sub directory.
+		For example: https://github.com/rstacruz/sparkup
+
 		Examples:
 >
 		NeoBundle 'git_repository_uri'
@@ -120,6 +126,7 @@ COMMANDS 					*neobundle-commands*
 		NeoBundle 'https://bitbucket.org/ns9tks/vim-fuzzyfinder'
 		NeoBundle 'git://github.com/Shougo/unite.vim.git', {'directory' : 'unite'}
 		NeoBundle 'git://host/path/repo.git', {'type': 'hg'}
+		NeoBundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 <
 		This supports revision lock.
 		Note: It's manual to restore its revision. Or, set to revision
