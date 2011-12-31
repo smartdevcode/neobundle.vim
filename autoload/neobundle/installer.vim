@@ -73,9 +73,9 @@ function! neobundle#installer#helptags(bundles)
     return
   endif
 
-  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.rtp)')
+  let help_dirs = filter(copy(a:bundles), 's:has_doc(v:val.path)')
 
-  call map(help_dirs, 's:helptags(v:val.rtp)')
+  call map(help_dirs, 's:helptags(v:val.path)')
   if !empty(help_dirs)
     call neobundle#installer#log('Helptags: done. '
           \ .len(help_dirs).' bundles processed')
@@ -158,7 +158,7 @@ function! neobundle#installer#get_sync_command(bang, bundle, number, max)
 endfunction
 function! neobundle#installer#get_revision_command(bang, bundle, number, max)
   let repo_dir = neobundle#util#substitute_path_separator(
-        \ expand(a:bundle.path.'/.'.a:bundle.type.'/')
+        \ expand(a:bundle.path.'/.'.a:bundle.type.'/'))
 
   " Lock revision.
   if a:bundle.type == 'svn'
