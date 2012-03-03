@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neobundle.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 16 Feb 2012.
+" Last Modified: 18 Nov 2011.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -25,14 +25,8 @@
 " Version: 0.1, for Vim 7.2
 "=============================================================================
 
-let s:save_cpo = &cpo
-set cpo&vim
-
-command! -nargs=+ NeoBundle call neobundle#config#bundle(
-      \ substitute(<q-args>, '\s"[^\-:.%#=*].*$', '', ''))
-
-command! -nargs=+ NeoExternalBundle
-      \ call neobundle#config#external_bundle(<args>)
+command! -nargs=+ NeoBundle
+      \ call neobundle#config#bundle(<args>)
 
 command! -nargs=? -bang NeoBundleInstall
       \ call neobundle#installer#install('!' == '<bang>', <q-args>)
@@ -54,16 +48,11 @@ augroup neobundle
 augroup END
 
 function! neobundle#rc(...)
-  let s:neobundle_dir =
-        \ neobundle#util#substitute_path_separator(
-        \ neobundle#util#expand(get(a:000, 0, '~/.vim/bundle')))
+  let s:neobundle_dir = expand(get(a:000, 0, '~/.vim/bundle'))
   call neobundle#config#init()
 endfunction
 
 function! neobundle#get_neobundle_dir()
   return s:neobundle_dir
 endfunction
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
 
