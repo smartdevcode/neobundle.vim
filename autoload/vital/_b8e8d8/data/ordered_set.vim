@@ -34,9 +34,7 @@ function s:ordered_set.push(elem) "{{{
     if !has_key(self._dict, id)
         let self._dict[id] = len(self._list) - self._origin_pos
         call add(self._list, a:elem)
-        return 1
     endif
-    return 0
 endfunction "}}}
 
 function! s:ordered_set.unshift(elem) "{{{
@@ -45,9 +43,7 @@ function! s:ordered_set.unshift(elem) "{{{
         let self._origin_pos += 1
         let self._dict[id] = -self._origin_pos
         call insert(self._list, a:elem)
-        return 1
     endif
-    return 0
 endfunction "}}}
 
 function! s:ordered_set.empty() "{{{
@@ -86,9 +82,7 @@ function! s:ordered_set.remove(elem) "{{{
             let self._origin_pos -= 1
         endif
         unlet self._dict[id]
-        return 1
     endif
-    return 0
 endfunction "}}}
 
 
