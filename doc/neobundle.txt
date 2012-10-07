@@ -627,23 +627,22 @@ https://github.com/Shougo/neobundle-vim-scripts
 
 ToDo
 
-		The recipe has the following keys. Most of keys are same to
-		neobundle configuration dictionary.
+		The recipe has following keys. Most of keys are same to
+		neobundle configuration dictionary:
 
 		name			(String)	(Required)
 		Specify plugin name.
 
 		path			(String)	(Required)
 		The repository URI.
-		Note: You can abbreviate long complete path, such as
-		"Shougo/neobundle.vim" instead of
-		"git://github.com/Shougo/neobundle.vim.git"
+		Note: You can omit long path.
+		Example: "Shougo/neobundle.vim"
 
 		description		(String)	(Optional)
-		Plugin description to show in neobundle/search.
+		String of plugin description.
 
 		author			(String)	(Optional)
-		The script author name to show in neobundle/search.
+		The script author name.
 
 		base			(String)	(Optional)
 		Directory base path.
@@ -658,23 +657,21 @@ ToDo
 		Repository site.
 
 		rtp			(String)	(Optional)
-		Runtime path. Some plugin repository doesn't assume the top of
-		the working tree is the runtime path, like under a directory
-		which name is usually vim.
+		Specify runtime path.
 
 		depends		(List or String)	(Optional)
-		Dependency plugins list.
+		Depends plugins list.
 
 		build			(Dictionary)	(Optional)
-		Build script. e.g. make
+		Specify build script.
 
 ==============================================================================
 FAQ						*neobundle-faq*
 
 Q: I want to manage rsense Vim plugin using neobundle.
-A: Unfortunately, rsense Vim doesn't have plugin directory so neobundle cannot
-manage it. But you can use vim-rsense instead of rsense which neobundle can
-manage.
+A: Unfortunately, rsense Vim has not plugin directory so neobundle cannot
+manage it. But you can use vim-rsense instead.  It can be managed by
+neobundle.
 
 https://github.com/taichouchou2/vim-rsense
 >
@@ -686,7 +683,7 @@ CHANGELOG					*neobundle-changelog*
 2012-10-07
 - Shallow clone as default in git.
 - Added type__shallow attribute.
-- More documented.
+- Improved log command in git.
 
 2012-10-06
 - Added vim-sripts.org source.
