@@ -423,18 +423,21 @@ COMMANDS 					*neobundle-commands*
 		"Shougo/neobundle.vim".
 
 :NeoBundleInstall! [{name}...]			*:NeoBundleInstall!*
-		Installs and updates {name} plugins.
+		Same to |:NeoBundleUpdate|.
+
+:NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
+		Installs and updates {name} plugins. {name} is fuzzy searched.
 		If {name} is omited, all configured plugin is installed
 		and updated.
 		Note: {name} is plugin name like "neobundle.vim". Not
 		"Shougo/neobundle.vim".
 
-:NeoBundleUpdate [{name}...]			*:NeoBundleUpdate*
-		Same to |:NeoBundleInstall!|.
-
-:NeoBundleClean [{bang} [{name}...]] 	*:NeoBundleClean*
+:NeoBundleClean [{bang} [{name}...]] 		*:NeoBundleClean*
 		Removes non configured bundles. If {bang} is added, force
 		remove bundles. If {name} are added, remove {name} bundles.
+
+:NeoBundleReinstall {name}...]		 	*:NeoBundleReinstall*
+		Reinstall {name} bundles.
 
 :NeoBundleList 					*:NeoBundleList*
 		Print list of configured bundles.
@@ -476,6 +479,8 @@ COMMANDS 					*neobundle-commands*
 		This command registers bundle, and installs it directly.
 		Note: If you used the command, you cannot customize the bundle
 		settings.
+		Note: The settings is saved in ".direct_bundles" in bundle
+		directory.
 >
 		NeoBundleDirectInstall 'Shougo/neocomplcache'
 <
@@ -696,6 +701,8 @@ Actions of each sources
 neobundle/search			*unite-action-neobundle-search*
 	yank		Yank plugin settings(Default action)
 	install		Direct install plugins from repository.
+			Note: The settings is saved in ".direct_bundles" in
+			bundle directory.
 	start		Browse github plugin page
 	open		Open receipe file
 
@@ -791,6 +798,9 @@ https://github.com/taichouchou2/vim-rsense
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
 
+2012-10-22
+- Added :NeoBundleReinstall command.
+
 2012-10-21
 - Improved revision lock behavior.
 - Added g:neobundle#default_options option.
@@ -807,6 +817,7 @@ CHANGELOG					*neobundle-changelog*
 
 2012-10-17
 - Improved error check in neobundle/search.
+- Fixed shallow clone behavior.
 
 2012-10-16
 - Improved update log.
