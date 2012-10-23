@@ -40,7 +40,7 @@ Changelog		|neobundle-changelog|
 ==============================================================================
 INTRODUCTION					*neobundle-introduction*
 
-*neobundle* is the ultimate Vim package manager. This plugin is based on
+*neobundle.vim* is the ultimate Vim package manager. This plugin is based on
 Vundle.vim (https://github.com/gmarik/vundle), but I added tons of features.
 
 For example:
@@ -797,6 +797,9 @@ https://github.com/taichouchou2/vim-rsense
 <
 ==============================================================================
 CHANGELOG					*neobundle-changelog*
+
+2012-10-23
+- Improved git parse.
 
 2012-10-22
 - Added :NeoBundleReinstall command.
