@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 31 Mar 2013.
+" Last Modified: 16 Mar 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -585,16 +585,10 @@ function! s:parse_options(opts)
   return options
 endfunction
 
-if neobundle#util#is_windows()
-  function! s:expand_path(path)
-    return neobundle#util#substitute_path_separator(
-          \ simplify(expand(escape(a:path, '*?{}'), 1)))
-  endfunction
-else
-  function! s:expand_path(path)
-    return simplify(expand(escape(a:path, '*?{}'), 1))
-  endfunction
-endif
+function! s:expand_path(path)
+  return neobundle#util#substitute_path_separator(
+        \ simplify(neobundle#util#expand2(a:path)))
+endfunction
 
 function! s:redir(cmd)
   redir => res
@@ -664,8 +658,7 @@ function! neobundle#config#set(name, dict)
   endif
 
   let bundle = s:init_bundle(extend(bundle, a:dict))
-  if bundle.lazy && bundle.sourced &&
-        \ !get(s:sourced_neobundles, bundle.name, 0)
+  if bundle.lazy && bundle.sourced && bundle.resettable
     " Remove from runtimepath.
     call s:rtp_rm(bundle)
     let bundle.sourced = 0
