@@ -619,14 +619,16 @@ function! s:install(bang, bundles)
         \ len(context.source__bundles)
 
   while 1
-    while context.source__number < context.source__max_bundles
-          \ && len(context.source__processes) <
-          \      g:neobundle#install_max_processes
+    if context.source__number < context.source__max_bundles
+      while context.source__number < context.source__max_bundles
+            \ && len(context.source__processes) <
+            \      g:neobundle#install_max_processes
 
-      call neobundle#installer#sync(
-            \ context.source__bundles[context.source__number],
-            \ context, 0)
-    endwhile
+        call neobundle#installer#sync(
+              \ context.source__bundles[context.source__number],
+              \ context, 0)
+      endwhile
+    endif
 
     for process in context.source__processes
       call neobundle#installer#check_output(context, process, 0)
@@ -636,7 +638,6 @@ function! s:install(bang, bundles)
     call filter(context.source__processes, '!v:val.eof')
 
     if empty(context.source__processes)
-          \ && context.source__number == context.source__max_bundles
       break
     endif
   endwhile
