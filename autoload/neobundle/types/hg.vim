@@ -47,7 +47,6 @@ function! s:type.detect(path, opts) "{{{
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'hg' }
   elseif isdirectory(a:path)
-    " Local directory.
     return {}
   endif
 

@@ -37,7 +37,6 @@ let s:type = {
 
 function! s:type.detect(path, opts) "{{{
   if isdirectory(a:path)
-    " Local directory.
     return {}
   endif
 

@@ -47,7 +47,6 @@ function! s:type.detect(path, opts) "{{{
     return { 'name' : split(a:path, '/')[-1],
           \  'uri' : a:path, 'type' : 'git' }
   elseif isdirectory(a:path)
-    " Local directory.
     return {}
   endif
 
