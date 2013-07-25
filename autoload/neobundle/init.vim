@@ -147,7 +147,6 @@ function! s:get_default() "{{{
   if !exists('s:default_bundle')
     let s:default_bundle = {
           \ 'uri' : '',
-          \ 'tail_path' : g:neobundle#enable_tail_path,
           \ 'script_type' : '',
           \ 'rev' : '',
           \ 'rtp' : '',

@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: config.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu at gmail.com>
-" Last Modified: 17 Jul 2013.
+" Last Modified: 22 Jul 2013.
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -41,6 +41,9 @@ function! neobundle#config#init() "{{{
       call neobundle#config#rtp_rm(bundle)
 
       call remove(s:neobundles, bundle.name)
+    elseif bundle.sourced &&
+        \ neobundle#is_sourced(bundle.name)
+      call neobundle#config#rtp_add(bundle)
     endif
   endfor
 
@@ -142,10 +145,6 @@ function! neobundle#config#source(names, ...) "{{{
 
     let bundle.dummy_mappings = []
     let bundle.dummy_commands = []
-
-    if has_key(s:neobundles, bundle.name)
-      call neobundle#config#rtp_rm(bundle)
-    endif
 
     call neobundle#config#rtp_add(bundle)
 
@@ -281,17 +280,17 @@ function! neobundle#config#rtp_rm(bundle) "{{{
 endfunction"}}}
 
 function! neobundle#config#rtp_add(bundle) abort "{{{
+  if has_key(s:neobundles, a:bundle.name)
+    call neobundle#config#rtp_rm(s:neobundles[a:bundle.name])
+  endif
+
   let rtp = a:bundle.rtp
   if isdirectory(rtp)
-    if a:bundle.tail_path
-      " Join to the tail in runtimepath.
-      let rtps = neobundle#util#split_rtp(&runtimepath)
-      let n = index(rtps, $VIMRUNTIME)
-      let &runtimepath = neobundle#util#join_rtp(
-            \ insert(rtps, rtp, n-1), &runtimepath, rtp)
-    else
-      execute 'set rtp^='.fnameescape(rtp)
-    endif
+    " Join to the tail in runtimepath.
+    let rtps = neobundle#util#split_rtp(&runtimepath)
+    let n = index(rtps, neobundle#get_rtp_dir())
+    let &runtimepath = neobundle#util#join_rtp(
+          \ insert(rtps, rtp, n), &runtimepath, rtp)
   endif
   if isdirectory(rtp.'/after')
     execute 'set rtp+='.fnameescape(rtp.'/after')
@@ -371,7 +370,7 @@ endfunction"}}}
 
 function! neobundle#config#add(bundle, ...) "{{{
   let bundle = a:bundle
-  let is_force = get(a:000, 0, 0)
+  let is_force = get(a:000, 0, bundle.local)
 
   if bundle.disabled
         \ || (!is_force && !bundle.overwrite &&
@@ -381,6 +380,9 @@ function! neobundle#config#add(bundle, ...) "{{{
 
   let prev_bundle = get(s:neobundles, bundle.name, {})
 
+  if !empty(prev_bundle)
+    call neobundle#config#rtp_rm(prev_bundle)
+  endif
   let s:neobundles[bundle.name] = bundle
 
   if (bundle.gui && !has('gui_running'))
@@ -408,10 +410,6 @@ function! neobundle#config#add(bundle, ...) "{{{
       " Load automatically.
       call neobundle#config#source(bundle.name)
     else
-      if bundle.sourced
-        call neobundle#config#rtp_rm(bundle)
-      endif
-
       let bundle.sourced = 1
       call neobundle#config#rtp_add(bundle)
     endif

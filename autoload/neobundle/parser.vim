@@ -161,7 +161,6 @@ function! neobundle#parser#local(localdir, options) "{{{
     call neobundle#parser#bundle([dir,
           \ extend({
           \   'local' : 1,
-          \   'resettable' : 0,
           \   'base' : neobundle#util#substitute_path_separator(
           \              fnamemodify(a:localdir, ':p')), }, a:options)])
   endfor
